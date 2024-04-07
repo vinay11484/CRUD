@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
+import Form from "./src/components/Form";
 const AppLayout = () => {
   return (
-    <div className="app">
-      <h1>formilk</h1>
+    <div>
+      <Form></Form>
     </div>
   );
 };
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<AppLayout />);
