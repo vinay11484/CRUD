@@ -1,39 +1,33 @@
-import React from "react";
+import React, { createContext } from "react";
 import { useFormik } from "formik";
 import { FormSchema } from "./FormSchema";
+import { createBrowserRouter } from "react-router-dom";
+export const FormContext = createContext("chaurasia");
+import { useMutation } from "@tanstack/react-query";
+import Post from "./Post";
 export default function Form() {
   const initialValues = {
-    name: "",
-    number: "",
-    email: "",
+    id: "",
+    title: "",
+    views: "",
   };
+  const { mutate } = useMutation({
+    mutationFn: (newpost) =>
+      fetch("http://localhost:3000/posts", {
+        method: "POST",
+        body: JSON.stringify(newpost),
+      }).then((response) => response.json()),
+  });
 
-  // const validate = (values) => {
-  //   const errors = {};
-  //   if (!values.name) {
-  //     errors.name = "Required";
-  //   } else if (values.name.length > 15) {
-  //     errors.firstName = "Must be 15 characters or less";
-  //   }
-  //   if (!values.email) {
-  //     errors.email = "Required";
-  //   } else if (
-  //  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-  //   ) {
-  //     errors.email = "Invalid email address";
-  //   }
-  //   console.log(errors);
-  //   return errors;
-  // };
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: FormSchema,
     // validate,
     onSubmit: (values) => {
-      console.log(values);
+      mutate(values);
     },
   });
-  console.log(formik.errors);
+  // console.log(formik.values);
   return (
     <div className="">
       <div className="text-center bg-slate-100 py-4  my-2 text-lg font-bold mb-8">
@@ -42,20 +36,18 @@ export default function Form() {
       <div className="flex flex-col text-center bg-slate-50 w-5/12 ml-auto mr-auto mt-32">
         <form onSubmit={formik.handleSubmit}>
           <div>
-            <label className="inline-block w-32 text-left font-bold ">
-              Name
-            </label>
+            <label className="inline-block w-32 text-left font-bold ">Id</label>
             <input
               type="text"
-              name="name"
+              name="id"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.name}
+              value={formik.values.id}
               className="p-1 mx-3 mt-12 w-60 bg-zinc-200 rounded-md"
             ></input>
-            {formik.touched.name && formik.errors.name ? (
+            {formik.touched.id && formik.errors.id ? (
               <div className=" text-red-600  ml-[260px] text-left ">
-                {formik.errors.name}
+                {formik.errors.id}
               </div>
             ) : (
               <div> &nbsp;</div>
@@ -63,19 +55,19 @@ export default function Form() {
           </div>
           <div>
             <label className="inline-block w-32 text-left font-bold">
-              Phone
+              Title
             </label>
             <input
               type="text"
-              name="number"
+              name="title"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.number}
+              value={formik.values.title}
               className="p-1 mx-3 w-60  bg-zinc-200 rounded-md"
             ></input>
-            {formik.touched.number && formik.errors.number ? (
+            {formik.touched.title && formik.errors.title ? (
               <div className=" text-red-600  ml-[260px] text-left ">
-                {formik.errors.number}
+                {formik.errors.title}
               </div>
             ) : (
               <div> &nbsp;</div>
@@ -83,19 +75,19 @@ export default function Form() {
           </div>
           <div>
             <label className="inline-block w-32 text-left font-bold">
-              Email
+              Views
             </label>
             <input
-              type="email"
-              name="email"
+              type="text"
+              name="views"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.email}
+              value={formik.values.views}
               className="p-1 mx-3  w-60  bg-zinc-200 rounded-md"
             ></input>
-            {formik.touched.email && formik.errors.email ? (
+            {formik.touched.views && formik.errors.views ? (
               <div className=" text-red-600  ml-[260px] text-left ">
-                {formik.errors.email}
+                {formik.errors.views}
               </div>
             ) : (
               <div> &nbsp;</div>
